@@ -48,6 +48,21 @@ def remove_nonascii(text):
     return text
 
 
+def get_position(id):
+    if id == 1:
+        singular_name = "Goalkeeper"
+    elif id == 2:
+        singular_name = "Defender"
+    elif id == 3:
+        singular_name = "Midfielder"
+    elif id == 4:
+        singular_name = "Forward"
+    else:
+        singular_name = "Unknown"
+
+    return singular_name
+
+
 def extract_players(dict, element='elements'):
     f = open(DOKUHOME+'id2.txt','w')
     for i in dict[element]:
@@ -57,6 +72,13 @@ def extract_players(dict, element='elements'):
         # Replace non-ascii characters
         full_name = remove_nonascii(second_name+"_"+first_name)
         string=id+":"+full_name
+        # Add element type
+        position=get_position(i['element_type'])
+        string=string+":"+position
+        # Add current cost
+        now_cost=i['now_cost']/10
+        string=string+":"+str(now_cost)
+        # Display to screen
         print(string)
         f.write(string+"\n")
     f.close()
