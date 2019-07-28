@@ -12,6 +12,7 @@ The FPL json file has the following dictionaries:
 
 import json
 
+DOKUHOME="/home/ian/dokuwiki/fantasy/"
 JSONFILE = "fpl2019-gw00"
 
 
@@ -27,17 +28,61 @@ def extract_data(dict, element):
         print(i)
 
 
+def extract_players(dict, element='elements'):
+    f = open(DOKUHOME+'id2.txt','w')
+    for i in dict[element]:
+        #print(i)
+        id=str(i['id'])
+        second_name=i['second_name'].lower().replace(" ","_")
+        first_name=i['first_name'].lower().replace(" ","_")
+        full_name=second_name+"_"+first_name
+        full_name = full_name.replace("'","_")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        full_name = full_name.replace("á","a")
+        full_name = full_name.replace("ä","ae")
+        full_name = full_name.replace("ã","a")
+        full_name = full_name.replace("ç","c")
+        full_name = full_name.replace("é","e")
+        full_name = full_name.replace("ë","e")
+        full_name = full_name.replace("í","i")
+        full_name = full_name.replace("ï","i")
+        full_name = full_name.replace("ó","o")
+        full_name = full_name.replace("ö","oe")
+        full_name = full_name.replace("ø","o")
+        full_name = full_name.replace("ß","ss")
+        full_name = full_name.replace("ú","_")
+        full_name = full_name.replace("ü","ue")
+        string=id+":"+full_name
+        print(string)
+        f.write(string+"\n")
+    f.close()
+
+    f = open(DOKUHOME+'player.txt','w')
+    for i in dict[element]:
+        #print(i)
+        string=str(i['id'])+":"+i['second_name']+", "+i['first_name']
+        #print(string)
+        f.write(string+"\n")
+    f.close()
+
+
 def main():
     data = load_jsonfile()
-    element = "events"
-    #element = "game_settings"
-    #element = "phases"
-    #element = "teams"
-    #element = "total_players"
-    #element = "elements"
-    #element = "element_stats"
-    #element = "element_types"
-    extract_data(data,element)
+    extract_players(data)
 
 if __name__ == "__main__":
     main()
