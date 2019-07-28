@@ -12,7 +12,7 @@ The FPL json file has the following dictionaries:
 
 import json
 
-DOKUHOME="/home/ian/dokuwiki/fantasy/"
+DOKUHOME="/home/ian/dokuwiki/fpl/"
 JSONFILE = "fpl2019-gw00"
 
 
@@ -28,54 +28,43 @@ def extract_data(dict, element):
         print(i)
 
 
+def remove_nonascii(text):
+    text = text.replace(" ","_")
+    text = text.replace("'","_")
+    text = text.replace("á","a")
+    text = text.replace("ä","ae")
+    text = text.replace("ã","a")
+    text = text.replace("ç","c")
+    text = text.replace("é","e")
+    text = text.replace("ë","e")
+    text = text.replace("í","i")
+    text = text.replace("ï","i")
+    text = text.replace("ó","o")
+    text = text.replace("ö","oe")
+    text = text.replace("ø","o")
+    text = text.replace("ß","ss")
+    text = text.replace("ú","_")
+    text = text.replace("ü","ue")
+    return text
+
+
 def extract_players(dict, element='elements'):
     f = open(DOKUHOME+'id2.txt','w')
     for i in dict[element]:
-        #print(i)
         id=str(i['id'])
-        second_name=i['second_name'].lower().replace(" ","_")
-        first_name=i['first_name'].lower().replace(" ","_")
-        full_name=second_name+"_"+first_name
-        full_name = full_name.replace("'","_")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        full_name = full_name.replace("á","a")
-        full_name = full_name.replace("ä","ae")
-        full_name = full_name.replace("ã","a")
-        full_name = full_name.replace("ç","c")
-        full_name = full_name.replace("é","e")
-        full_name = full_name.replace("ë","e")
-        full_name = full_name.replace("í","i")
-        full_name = full_name.replace("ï","i")
-        full_name = full_name.replace("ó","o")
-        full_name = full_name.replace("ö","oe")
-        full_name = full_name.replace("ø","o")
-        full_name = full_name.replace("ß","ss")
-        full_name = full_name.replace("ú","_")
-        full_name = full_name.replace("ü","ue")
+        first_name=i['first_name'].lower()
+        second_name=i['second_name'].lower()
+        # Replace non-ascii characters
+        full_name = remove_nonascii(second_name+"_"+first_name)
         string=id+":"+full_name
         print(string)
         f.write(string+"\n")
     f.close()
 
+    # Create player txt files
     f = open(DOKUHOME+'player.txt','w')
     for i in dict[element]:
-        #print(i)
         string=str(i['id'])+":"+i['second_name']+", "+i['first_name']
-        #print(string)
         f.write(string+"\n")
     f.close()
 
