@@ -1,6 +1,7 @@
 # Specific to this project
 .idea
 csv/
+json/
 
 
 # Byte-compiled / optimized / DLL files
