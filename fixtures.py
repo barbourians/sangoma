@@ -4,7 +4,7 @@ Extract current PL fixtures
 
 import json
 
-GW = 2
+GW = "02"
 
 TEAM = {1:["Arsenal", "ARS"],
         2:["Aston Villa", "AVL"],
@@ -32,43 +32,58 @@ def load_jsonfile():
     filename = "json/fixtures.json"
     with open(filename) as json_file:
         data = json.load(json_file)
+
     return data
 
 
-def process_fixtures(data):
-    print("game_week", end=",")
-    print("kickoff_date", end=",")
-    print("kickoff_time", end=",")
-    print("team_h", end=",")
-    print("team_a", end=",")
-    #print("team_h_difficulty", end=",")
-    #print("team_a_difficulty", end=",")
-    print()
+def read_game_week_file():
+    team = {}
+    with open("/home/ian/dokuwiki/fpl/FILES/my-team/gw"+GW+".txt",'r') as fp:
+        for line in fp:
+            num = line[0:3].strip()
+            team[num] = line.strip().split(" ~ ")
+
+    return team
+
+
+def process_fixtures(data, team):
+    print("~~NOTOC~~")
+    print("======","FPL Game Week",GW,"======")
+    header_date = ""
+
     for event in data:
         game_week = event['event']
-        if game_week != GW:
+        if game_week != int(GW):
             continue
         kickoff_date = event['kickoff_time'][0:10]
         kickoff_time = str(int(event['kickoff_time'][11:13])+1)+event['kickoff_time'][13:16]
-        team_h = TEAM[event['team_h']][1]
-        team_a = TEAM[event['team_a']][1]
+        team_h = TEAM[event['team_h']][0]
+        team_a = TEAM[event['team_a']][0]
         team_h_difficulty = event['team_h_difficulty']
         team_a_difficulty = event['team_a_difficulty']
 
-        # Display to the screen
-        print(game_week, end=",")
-        print(kickoff_date, end=",")
-        print(kickoff_time, end=",")
-        print(team_h, end=",")
-        print(team_a, end=",")
-        #print(team_h_difficulty, end=",")
-        #print(team_a_difficulty, end=",")
-        print()
+        # Date heading
+        if header_date != kickoff_date:
+            print("=====",kickoff_date,"=====")
+            header_date = kickoff_date
+        # Display data
+        print("===",team_h,"vs",team_a,"@",kickoff_time,"===")
+
+        # See if I have these teams
+        home = "[[team:"+TEAM[event['team_h']][1]+"]]"
+        for key,value in team.items():
+            if home in value:
+                print("  *",value[1],"~",value[2])
+        away = "[[team:"+TEAM[event['team_a']][1]+"]]"
+        for key,value in team.items():
+            if away in value:
+                print("  *",value[1],"~",value[2])
 
 
 def main():
+    team = read_game_week_file()
     data = load_jsonfile()
-    process_fixtures(data)
+    process_fixtures(data, team)
 
 
 if __name__ == "__main__":

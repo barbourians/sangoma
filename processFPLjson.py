@@ -15,6 +15,29 @@ import json
 DOKUHOME="/home/ian/dokuwiki/fpl/"
 JSONFILE = "fpl2019-gw00"
 
+MYTEAM = [44,47,68,141,144,151,171,182,183,191,203,212,265,313,405]
+
+TEAM = {1:["Arsenal", "ARS"],
+        2:["Aston Villa", "AVL"],
+        3:["Bournemouth", "BOU"],
+        4:["Brighton", "BHA"],
+        5:["Burnley", "BUR"],
+        6:["Chelsea", "CHE"],
+        7:["Crystal Palace", "CRY"],
+        8:["Everton", "EVE"],
+        9:["Leicester", "LEI"],
+        10:["Liverpool", "LIV"],
+        11:["Man City", "MCI"],
+        12:["Man Utd", "MUN"],
+        13:["Newcastle", "NEW"],
+        14:["Norwich", "NOR"],
+        15:["Sheffield Utd", "SHU"],
+        16:["Southampton", "SOU"],
+        17:["Spurs", "TOT"],
+        18:["Watford", "WAT"],
+        19:["West Ham", "WHU"],
+        20:["Wolves", "WOL"]}
+
 
 def load_jsonfile():
     filename = "json/"+JSONFILE+".json"
@@ -64,29 +87,32 @@ def get_position(id):
 
 
 def extract_players(dict, element='elements'):
-    f = open(DOKUHOME+'id2.txt','w')
+    f = open(DOKUHOME+'id.txt','w')
     for i in dict[element]:
         id=str(i['id'])
-        first_name=i['first_name'].lower()
-        second_name=i['second_name'].lower()
+        first_name = i['first_name'].lower()
+        second_name = i['second_name'].lower()
         # Replace non-ascii characters
         full_name = remove_nonascii(second_name+"_"+first_name)
-        string=id+":"+full_name
+        string = id+":"+full_name
         # Add element type
-        position=get_position(i['element_type'])
-        string=string+":"+position
+        position = get_position(i['element_type'])
+        string = string+":"+position
         # Add current cost
-        now_cost=i['now_cost']/10
-        string=string+":"+str(now_cost)
+        #now_cost = i['now_cost']/10
+        #string = string+":"+str(now_cost)
+        # Add current team
+        team = TEAM[i['team']][1]
+        string = string+":"+team
         # Display to screen
         print(string)
         f.write(string+"\n")
     f.close()
 
-    # Create player txt files
+    # Create player txt file
     f = open(DOKUHOME+'player.txt','w')
     for i in dict[element]:
-        string=str(i['id'])+":"+i['second_name']+", "+i['first_name']
+        string = str(i['id'])+":"+i['second_name']+", "+i['first_name']
         f.write(string+"\n")
     f.close()
 
