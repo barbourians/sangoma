@@ -1,8 +1,12 @@
 """
 Extract current PL fixtures
 """
-
 import json
+import calendar
+
+from datetime import date
+from datetime import datetime
+
 
 GW = "02"
 
@@ -64,7 +68,10 @@ def process_fixtures(data, team):
 
         # Date heading
         if header_date != kickoff_date:
-            print("=====",kickoff_date,"=====")
+            gw_date = datetime.strptime(kickoff_date, '%Y-%m-%d')
+            dow = calendar.day_name[gw_date.weekday()]
+            month = calendar.month_name[gw_date.month]
+            print("=====",dow,gw_date.day,month,gw_date.year,"=====")
             header_date = kickoff_date
         # Display data
         print("===",team_h,"vs",team_a,"@",kickoff_time,"===")
