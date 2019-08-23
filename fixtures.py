@@ -8,7 +8,7 @@ from datetime import date
 from datetime import datetime
 
 
-GW = "02"
+GW = "03"
 
 TEAM = {1:["Arsenal", "ARS"],
         2:["Aston Villa", "AVL"],
@@ -45,13 +45,15 @@ def read_game_week_file():
     with open("/home/ian/dokuwiki/fpl/FILES/my-team/gw"+GW+".txt",'r') as fp:
         for line in fp:
             num = line[0:3].strip()
-            team[num] = line.strip().split(" ~ ")
+            player = line.strip().split(" ~ ")
+            player.append("")  # Make sure each player list has at least 3 items
+            team[num] = player
 
     return team
 
 
 def process_fixtures(data, team):
-    print("~~NOTOC~~")
+    #print("~~NOTOC~~")
     print("======","FPL Game Week",GW,"======")
     header_date = ""
 
@@ -80,11 +82,11 @@ def process_fixtures(data, team):
         home = "[[team:"+TEAM[event['team_h']][1]+"]]"
         for key,value in team.items():
             if home in value:
-                print("  *",value[1],"~",value[2])
+                print("  *",value[1],"~",value[2], value[3])
         away = "[[team:"+TEAM[event['team_a']][1]+"]]"
         for key,value in team.items():
             if away in value:
-                print("  *",value[1],"~",value[2])
+                print("  *",value[1],"~",value[2], value[3])
 
 
 def main():

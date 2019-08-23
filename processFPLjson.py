@@ -13,7 +13,7 @@ The FPL json file has the following dictionaries:
 import json
 
 DOKUHOME="/home/ian/dokuwiki/fpl/"
-JSONFILE = "fpl2019-gw00"
+JSONFILE = "fpl2019-gw03"
 
 MYTEAM = [44,47,68,141,144,151,171,182,183,191,203,212,265,313,405]
 
